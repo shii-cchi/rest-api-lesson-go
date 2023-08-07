@@ -3,6 +3,7 @@ package user
 import (
 	"github.com/julienschmidt/httprouter"
 	"go-rest-api-lesson/internal/handlers"
+	"go-rest-api-lesson/pkg/logging"
 	"net/http"
 )
 
@@ -14,10 +15,13 @@ const (
 )
 
 type handler struct {
+	logger logging.Logger
 }
 
-func NewHandler() handlers.Handler {
-	return &handler{}
+func NewHandler(logger logging.Logger) handlers.Handler {
+	return &handler{
+		logger: logger,
+	}
 }
 
 func (h *handler) Register(router *httprouter.Router) {

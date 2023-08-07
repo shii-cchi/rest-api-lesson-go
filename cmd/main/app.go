@@ -3,25 +3,27 @@ package main
 import (
 	"github.com/julienschmidt/httprouter"
 	"go-rest-api-lesson/internal/user"
-	"log"
+	"go-rest-api-lesson/pkg/logging"
 	"net"
 	"net/http"
 	"time"
 )
 
 func main() {
-	log.Println("create router")
+	logger := logging.GetLogger()
+	logger.Info("create router")
 	router := httprouter.New()
 
-	log.Println("register user handler")
-	handler := user.NewHandler()
+	logger.Info("register user handler")
+	handler := user.NewHandler(logger)
 	handler.Register(router)
 
 	start(router)
 }
 
 func start(router *httprouter.Router) {
-	log.Println("start application")
+	logger := logging.GetLogger()
+	logger.Info("start application")
 
 	listener, err := net.Listen("tcp", "0.0.0.0:1234")
 
@@ -35,6 +37,6 @@ func start(router *httprouter.Router) {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	log.Println("server is listening port 1234")
-	log.Fatal(server.Serve(listener))
+	logger.Info("server is listening port 1234")
+	logger.Fatal(server.Serve(listener))
 }
